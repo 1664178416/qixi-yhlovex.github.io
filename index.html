@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>七夕 · 我们的纪念册</title>
+    <meta name="description" content="以诗意记录我们从相遇到相守的一路时光。">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <!-- 可选：如访问受限可删除以下字体引入，使用系统中文字体 -->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        /* 首屏需要：防止未加载完出现闪烁 */
+        html { background: #0b1020; }
+    </style>
+</head>
+<body>
+    <!-- 星空画布（全局背景） -->
+    <canvas id="sky" aria-hidden="true"></canvas>
+
+    <!-- 背景音乐播放器 -->
+    <div class="music-player">
+        <audio id="backgroundMusic" preload="auto" autoplay>
+            <source src="audio/background-sound1.mp3" type="audio/mpeg">
+            <source src="audio/background-sound1.ogg" type="audio/ogg">
+            <source src="audio/background-sound1.wav" type="audio/wav">
+            您的浏览器不支持音频播放。
+        </audio>
+        <button class="music-toggle" id="musicToggle" aria-label="播放/暂停背景音乐">
+            <svg class="music-icon play-icon" viewBox="0 0 24 24" width="24" height="24">
+                <path d="M8 5v14l11-7z" fill="currentColor"/>
+            </svg>
+            <svg class="music-icon pause-icon" viewBox="0 0 24 24" width="24" height="24" style="display: none;">
+                <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z" fill="currentColor"/>
+            </svg>
+        </button>
+        <div class="music-waves">
+            <div class="wave"></div>
+            <div class="wave"></div>
+            <div class="wave"></div>
+        </div>
+        <div class="song-info">
+            <span class="current-song">Song 1/3</span>
+        </div>
+    </div>
+
+    <!-- 信封首屏 -->
+    <div class="envelope-overlay" role="dialog" aria-label="开启我们的故事">
+        <div class="envelope">
+            <div class="envelope__flap"></div>
+            
+            <div class="postmark" aria-hidden="true">
+                <svg viewBox="0 0 160 160" width="160" height="160">
+                    <defs>
+                        <filter id="ink-blur">
+                            <feGaussianBlur in="SourceGraphic" stdDeviation="0.6" />
+                        </filter>
+                    </defs>
+                    <circle cx="80" cy="80" r="58" fill="none" stroke="#c23d4b" stroke-width="4" />
+                    <circle cx="80" cy="80" r="44" fill="none" stroke="#c23d4b" stroke-width="2" stroke-dasharray="4 6" />
+                    <text x="80" y="76" text-anchor="middle" font-size="14" fill="#c23d4b" font-family="'Inter','Noto Serif SC',serif">QIXI LOVE</text>
+                    <text x="80" y="96" text-anchor="middle" font-size="12" fill="#c23d4b" font-family="'Inter','Noto Serif SC',serif"></text>
+                </svg>
+            </div>
+            <div class="envelope__paper">
+                <h2>写给你的七夕小信件</h2>
+                <p class="envelope__msg">
+                    hello 宝贝，这是我们一起度过的第二个七夕啦！第一个七夕我们才刚在一起不久，而到现在我们就已经一起携手经历了无数个日夜：我们一起逛过漂亮的景点，一起吃过街边小吃，一起分享生活的点滴，这其中既有快乐美好的时光，也有苦涩内耗的回忆……
+                    <br>
+                    感谢上天让我遇到了你，在国防科大的那场午宴上，在简单小叙后的电梯同行，那是镌刻进我生命的时刻。尽管一路走来我们之间逐渐褪去了滤镜，但在见过更真实的你后我依然爱你，哦不，更加爱你，希望你能感受到这份被坚定选择的心意，我相信我们能够一直一直一直走到最后，直到生命的尽头……
+                </p>
+                <button class="btn btn--primary envelope__start" aria-label="启程">启程</button>
+            </div>
+            <div class="envelope__body"></div>
+        </div>
+        <p class="envelope__hint">点击“启程”，让信笺开启，故事展开。</p>
+    </div>
+    <div class="site is-hidden">
+    <header class="hero">
+        <nav class="nav">
+            <a href="#story" class="nav__link">相识至今</a>
+            <a href="#poetry" class="nav__link">诗与远方</a>
+            <a href="#gallery" class="nav__link">照片墙</a>
+            <a href="#future" class="nav__link">未来可期</a>
+        </nav>
+        <div class="hero__content">
+            <h1 class="hero__title">七夕 · 我们的纪念册</h1>
+            <p class="hero__subtitle">山川相逢，星河作证</p>
+            <!-- 在此填写你们的纪念日期，例如：2021.06.01 - 至今 -->
+            <p class="hero__dates"><span>我们的时光</span><em><!-- TODO: 填写起始日期与“至今” --></em></p>
+            <a href="#story" class="btn btn--primary">启程</a>
+        </div>
+    </header>
+
+    <main>
+        <section id="story" class="section section--story">
+            <div class="section__header reveal">
+                <h2>相识至今</h2>
+                <p>把一路的心动，交给时间慢慢珍藏。</p>
+            </div>
+            <ol class="timeline">
+                <!-- TODO: 补充每一段记忆的时间、地点与小故事 -->
+                <li class="timeline__item reveal" data-timeline="first-meet">
+                    <div class="timeline__date">
+                        2024-07-11
+                    </div>
+                    <div class="timeline__card timeline__card--expandable">
+                        <h3 class="timeline__title">初见 <span class="expand-icon">📸</span></h3>
+                        <p class="timeline__desc">第一次在餐桌上见到你💫，我开始打开话匣和你闲聊😎，我们喝着饮料互相交换着夏令营的信息🥰，而后在电梯里面我数着秒数，鼓起勇气加了你的微信🙌。
+                        </p>
+                        <div class="timeline__photos">
+                            <div class="photo-grid">
+                                <img src="assets/images/1.jpg" alt="酒店大堂" loading="lazy">
+                                <img src="assets/images/3.jpg" alt="夏令营合影" loading="lazy">
+                                <img src="assets/images/2.jpg" alt="你的当时头像" loading="lazy">
+                            </div>
+                        </div>
+                    </div>
+                </li>
+                <li class="timeline__item reveal" data-timeline="relationship">
+                    <div class="timeline__date"><!-- 例：2021-09-10 -->
+                        2024-08-10
+                    </div>
+                    <div class="timeline__card timeline__card--expandable">
+                        <h3 class="timeline__title">确定关系 <span class="expand-icon">💕</span></h3>
+                        <p class="timeline__desc">经过了一个月的接触后，我发现我已经深深地爱上了你💝，我坚信你就是我的命中注定🌸，在8.10这天晚上，我经历了激烈的思想斗争后终于按下了发送键向你告白✨。
+                        </p>
+                        <div class="timeline__photos">
+                            <div class="photo-grid">
+                                <img src="assets/images/4.jpg" alt="告白时刻" loading="lazy">
+                                <img src="assets/images/5.jpg" alt="确定关系纪念" loading="lazy">
+                                <img src="assets/images/6.jpg" alt="甜蜜合影" loading="lazy">
+                                
+                            </div>
+                        </div>
+                    </div>
+                </li>
+                <li class="timeline__item reveal" data-timeline="journey">
+                    <div class="timeline__date">
+                        2024-2025 
+                        n days
+                    </div>
+                    <div class="timeline__card timeline__card--expandable">
+                        <h3 class="timeline__title">难忘之旅 <span class="expand-icon">🌟</span></h3>
+                        <p class="timeline__desc">在那之后我们经过了一段时间的异地时光，终于见面了！呜呜呜太激动了🌟💖，我们一起去逛了古城喝了大碗茶逛了竹山洞，晚上在龙湖放烟花放到尽兴……还有后面好多好多事情🌠，虽然中途可能有些不愉快💔，但我们还是会和好如初🎁，我一定改正并充分尊重你的意见🎊。
+                        </p>
+                        <div class="timeline__photos">
+                            <div class="photo-grid">
+                                <img src="assets/images/7.jpg" alt="旅行风景" loading="lazy">
+                                <img src="assets/images/8.jpg" alt="旅途中的我们" loading="lazy">
+                                <img src="assets/images/12.jpg" alt="美食分享" loading="lazy">
+                                <img src="assets/images/13.jpg" alt="纪念日庆祝" loading="lazy">
+                                <img src="assets/images/14.jpg" alt="快乐时光" loading="lazy">
+                                <img src="assets/images/15.jpg" alt="快乐时光" loading="lazy">
+                                <img src="assets/images/16.jpg" alt="快乐时光" loading="lazy">
+                                <img src="assets/images/17.jpg" alt="快乐时光" loading="lazy">
+                                <img src="assets/images/18.jpg" alt="快乐时光" loading="lazy">
+                                <img src="assets/images/19.jpg" alt="快乐时光" loading="lazy">
+                                <img src="assets/images/20.jpg" alt="快乐时光" loading="lazy">
+                                <img src="assets/images/9.png" alt="快乐时光" loading="lazy">
+                            </div>
+                        </div>
+                    </div>
+                </li>
+                <li class="timeline__item reveal" data-timeline="future">
+                    <div class="timeline__date">
+                        2025-NaN
+                        util grow old
+                    </div>
+                    <div class="timeline__card timeline__card--expandable">
+                        <h3 class="timeline__title">携手向前 <span class="expand-icon">💖</span></h3>
+                        <p class="timeline__desc">前段时间你来万载找我了，我们一起去玩了漂流😆看了电影还一起参与外卖大战😍只不过我又一次没有尊重你的意思，甚至最近我们还经历了有史以来最大的一次冷战⛈️，我认真的反思并纠正😵，熟悉后难免的会有一些滤镜破碎后的缺点暴露，但我一定竭力做的更好一些😭让我们一同携手度过未来的每一个挑战👏。
+                        </p>
+                        <div class="timeline__photos">
+                            <div class="photo-grid">
+                                <img src="assets/images/21.jpg" alt="最近的温柔瞬间" loading="lazy">
+                                <img src="assets/images/22.jpg" alt="日常生活" loading="lazy">
+                                <img src="assets/images/23.jpg" alt="互相陪伴" loading="lazy">
+                            </div>
+                        </div>
+                    </div>
+                </li>
+            </ol>
+        </section>
+
+        <section id="poetry" class="section section--poetry">
+            <div class="section__header reveal">
+                <h2>诗与远方</h2>
+                <p>以古典的语言，寄托现代的相思。</p>
+            </div>
+            <div class="poems">
+                <article class="poem reveal">
+                    <h3>《鹊桥仙·纤云弄巧》</h3>
+                    <p class="poem__author">宋 · 秦观</p>
+                    <blockquote>
+                        纤云弄巧，飞星传恨，银汉迢迢暗度。<br>
+                        金风玉露一相逢，便胜却、人间无数。<br>
+                        柔情似水，佳期如梦，忍顾鹊桥归路。<br>
+                        两情若是久长时，又岂在、朝朝暮暮。
+                    </blockquote>
+                </article>
+                <article class="poem reveal">   
+                    <h3>《蝶恋花》</h3>
+                    <p class="poem__author">宋 · 晏几道</p>
+                    <blockquote>
+                        喜鹊桥成催凤驾。天为欢迟，乞与初凉夜。<br>
+                        乞巧双蛾加意画。玉钩斜傍西南挂。<br>
+                        分钿擘钗凉叶下。香袖凭肩，谁记当时话。<br>
+                        路隔银河犹可借。世间离恨何年罢。
+                    </blockquote>
+                </article>
+                <article class="poem reveal">
+                    <h3>《私语》</h3>
+                    <p class="poem__author">— 来自我的心声 —</p>
+                    <blockquote>
+                       你是我文案里的主角，是我故事里的人🎈。<br>
+                       你是跨越山河的向往，是眼中不灭的光🤗。<br>
+                       有你朝夕相伴，浩瀚星辰尽失色💞。
+                    </blockquote>
+                </article>
+            </div>
+        </section>
+
+        <section id="gallery" class="section section--gallery">
+            <div class="section__header reveal">
+                <h2>照片墙</h2>
+                <p>把欢笑与泪光定格在此刻。</p>
+            </div>
+            <div class="grid-gallery">
+                <!-- 提示：将照片放入 assets/images/ 目录，并替换下方 src -->
+                <!-- 每个 figure 是一个格子，建议横竖图混排；可重复添加或删减 -->
+                <figure class="grid-item reveal">
+                    <img src="assets/images/12.jpg" alt="" loading="lazy">
+                    <figcaption>第一次见面一起在龙湖放烟花到半夜</figcaption>
+                </figure>
+                <figure class="grid-item reveal">
+                    <img src="assets/images/24.jpg" alt="第一次见面去竹山洞，那时候还有点放不开" loading="lazy">
+                    <figcaption>第一次见面去竹山洞，那时候还有点放不开</figcaption>
+                </figure>
+                <figure class="grid-item reveal">
+                    <img src="assets/images/25.jpg" alt="第一次要送你走时在宝石鲁塘坐秋千，很舍不得" loading="lazy">
+                    <figcaption>第一次要送你走时在宝石鲁塘坐秋千，很舍不得</figcaption>
+                </figure>
+                <figure class="grid-item reveal">
+                    <img src="assets/images/18.jpg" alt="日常小事也值得被记住" loading="lazy">
+                    <figcaption>第二次见面我们一起去栖隐谷我让你走玻璃栈道不牵着你哈哈哈</figcaption>
+                </figure>
+                <figure class="grid-item reveal">
+                    <img src="assets/images/10.jpg" alt="纪念日合影" loading="lazy">
+                    <figcaption>你来成都找我，美美的毕业照</figcaption>
+                </figure>
+                <figure class="grid-item reveal">
+                    <img src="assets/images/11.jpg" alt="最喜欢的美食" loading="lazy">
+                    <figcaption>毕业照太多好看的啦😆</figcaption>
+                </figure>
+                <figure class="grid-item reveal">
+                    <img src="assets/images/26.jpg" alt="最喜欢的美食" loading="lazy">
+                    <figcaption>毕业照太多好看的啦😆</figcaption>
+                </figure>
+                <figure class="grid-item reveal">
+                    <img src="assets/images/28.jpg" alt="最喜欢的美食" loading="lazy">
+                    <figcaption>毕业照太多好看的啦😆</figcaption>
+                </figure>
+                <figure class="grid-item reveal">
+                    <img src="assets/images/29.jpg" alt="最喜欢的美食" loading="lazy">
+                    <figcaption>毕业照太多好看的啦😆</figcaption>
+                </figure>
+                <figure class="grid-item reveal">
+                    <img src="assets/images/27.jpg" alt="最喜欢的美食" loading="lazy">
+                    <figcaption>宝贝在电科图书馆沉思💝</figcaption>
+                </figure>
+                <figure class="grid-item reveal">
+                    <img src="assets/images/30.jpg" alt="最喜欢的美食" loading="lazy">
+                    <figcaption>去熊猫基地看熊猫咯~</figcaption>
+                </figure>
+                <figure class="grid-item reveal">
+                    <img src="assets/images/31.jpg" alt="最喜欢的美食" loading="lazy">
+                    <figcaption>跟着王子探险终究还是看到了小熊猫没留下遗憾😁</figcaption>
+                </figure>
+                <figure class="grid-item reveal">
+                    <img src="assets/images/32.jpg" alt="最喜欢的美食" loading="lazy">
+                    <figcaption>去九寨沟的路上，芜湖</figcaption>
+                </figure>
+                <figure class="grid-item reveal">
+                    <img src="assets/images/43.jpg" alt="最喜欢的美食" loading="lazy">
+                    <figcaption>见到了薰衣草花海，漂亮捏🙂</figcaption>
+                </figure>
+                <figure class="grid-item reveal">
+                    <img src="assets/images/33.jpg" alt="最喜欢的美食" loading="lazy">
+                    <figcaption>司机大哥给我们拍的游客照</figcaption>
+                </figure>
+                <figure class="grid-item reveal">
+                    <img src="assets/images/34.jpg" alt="最喜欢的美食" loading="lazy">
+                    <figcaption>宝贝和九寨沟都太漂亮啦🤩</figcaption>
+                </figure>
+                <figure class="grid-item reveal">
+                    <img src="assets/images/35.jpg" alt="最喜欢的美食" loading="lazy">
+                    <figcaption>宝贝和九寨沟都太漂亮啦🤩</figcaption>
+                </figure>
+                <figure class="grid-item reveal">
+                    <img src="assets/images/36.jpg" alt="最喜欢的美食" loading="lazy">
+                    <figcaption>宝贝和九寨沟都太漂亮啦🤩</figcaption>
+                </figure>
+                <figure class="grid-item reveal">
+                    <img src="assets/images/38.jpg" alt="最喜欢的美食" loading="lazy">
+                    <figcaption>宝贝和九寨沟都太漂亮啦🤩</figcaption>
+                </figure>
+                <figure class="grid-item reveal">
+                    <img src="assets/images/37.jpg" alt="最喜欢的美食" loading="lazy">
+                    <figcaption>和宝贝在九寨沟美美的合照💖</figcaption>
+                </figure>
+                <figure class="grid-item reveal">
+                    <img src="assets/images/39.jpg" alt="最喜欢的美食" loading="lazy">
+                    <figcaption>和宝贝在九寨沟美美的合照💖</figcaption>
+                </figure>
+                <figure class="grid-item reveal">
+                    <img src="assets/images/40.jpg" alt="最喜欢的美食" loading="lazy">
+                    <figcaption>搞怪的照片，九寨沟太好看啦😆</figcaption>
+                </figure>
+                <figure class="grid-item reveal">
+                    <img src="assets/images/41.jpg" alt="最喜欢的美食" loading="lazy">
+                    <figcaption>搞怪的照片，九寨沟太好看啦😆</figcaption>
+                </figure>
+                <figure class="grid-item reveal">
+                    <img src="assets/images/42.jpg" alt="最喜欢的美食" loading="lazy">
+                    <figcaption>搞怪的照片，九寨沟太好看啦😆</figcaption>
+                </figure>
+                <figure class="grid-item reveal">
+                    <img src="assets/images/44.jpg" alt="最喜欢的美食" loading="lazy">
+                    <figcaption>去松潘古城的合照，民宿大哥人很好🥰，虽然在前一天在川主寺被坑了😭</figcaption>
+                </figure>
+                <figure class="grid-item reveal">
+                    <img src="assets/images/45.jpg" alt="最喜欢的美食" loading="lazy">
+                    <figcaption>登顶峨眉山！😎</figcaption>
+                </figure>
+                <figure class="grid-item reveal">
+                    <img src="assets/images/46.jpg" alt="最喜欢的美食" loading="lazy">
+                    <figcaption>和IFS熊猫的美美合照🤗</figcaption>
+                </figure>
+                <figure class="grid-item reveal">
+                    <img src="assets/images/48.jpg" alt="最喜欢的美食" loading="lazy">
+                    <figcaption>和双子塔的漂亮合照🤗不过回去路上我们好像有点小矛盾呜呜呜😭</figcaption>
+                </figure>
+                <figure class="grid-item reveal">
+                    <img src="assets/images/47.jpg" alt="最喜欢的美食" loading="lazy">
+                    <figcaption>和IFS熊猫的一起的美美合照🤗</figcaption>
+                </figure>
+                <figure class="grid-item reveal">
+                    <img src="assets/images/49.jpg" alt="最喜欢的美食" loading="lazy">
+                    <figcaption>一起玩漂流时的照片，很开心😁</figcaption>
+                </figure>
+                <figure class="grid-item reveal">
+                    <img src="assets/images/50.png" alt="最喜欢的美食" loading="lazy">
+                    <figcaption>你给我抓拍的我瞄准动作，很飒🌟</figcaption>
+                </figure>
+                <figure class="grid-item reveal">
+                    <img src="assets/images/51.jpg" alt="最喜欢的美食" loading="lazy">
+                    <figcaption>最后我和我妈妈一起送你回去，下了雨⛈️，一路上我们聊了很多</figcaption>
+                </figure>
+                </figure>
+            </div>
+        </section>
+
+        <section id="future" class="section section--future">
+            <div class="section__header reveal">
+                <h2>未来可期</h2>
+                <p>沿着星河，朝着更温柔的方向。</p>
+            </div>
+            <div class="future reveal">
+                <ul class="future__list">
+                    <!-- TODO: 写下你们对未来的小愿望，可随意增删 -->
+                    <li></li>
+                    <li></li>
+                    <li></li>
+                    <li><!-- 例：和你拍一组复古胶片照 --></li>
+                    <li><!-- 例：一起完成一件小小但重要的事 --></li>
+                </ul>
+                <div class="future__vow">
+                    <p>
+                        <!-- 写下彼此的誓言，例如：
+                        无论风雨、无论远近，
+                        我都在你身边，
+                        与你看尽朝暮与星辰。 -->
+                    </p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <button class="back-to-top" aria-label="返回顶部">↑</button>
+
+    <footer class="footer">
+        <p>愿时光清浅，与你常伴。</p>
+        
+    </footer>
+    </div>
+
+    <script src="script.js" defer></script>
+</body>
+</html>
+
+
