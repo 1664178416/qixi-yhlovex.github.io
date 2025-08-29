@@ -137,26 +137,46 @@ document.addEventListener('DOMContentLoaded', function () {
     }, 8000);
   }
   
-  // 播放下一首歌
+  // 播放下一首歌 - 优化版本
   function playNextSong() {
+    const wasPlaying = !backgroundMusic.paused;
     currentSongIndex = (currentSongIndex + 1) % playlist.length;
     console.log(`切换到下一首歌: ${currentSongIndex + 1}`);
-    loadSong(currentSongIndex);
-    // 只有在用户没有主动暂停的情况下才继续播放
-    if (!backgroundMusic.paused && !userPaused) {
-      backgroundMusic.play().catch(console.log);
-    }
+    
+    // 优化：使用 requestAnimationFrame 减少重绘
+    requestAnimationFrame(() => {
+      loadSong(currentSongIndex);
+      
+      // 保持原有播放状态
+      if (wasPlaying && !userPaused) {
+        backgroundMusic.play().then(() => {
+          updateMusicButton(true);
+        }).catch(console.log);
+      } else {
+        updateMusicButton(wasPlaying);
+      }
+    });
   }
   
-  // 播放上一首歌
+  // 播放上一首歌 - 优化版本
   function playPreviousSong() {
+    const wasPlaying = !backgroundMusic.paused;
     currentSongIndex = (currentSongIndex - 1 + playlist.length) % playlist.length;
     console.log(`切换到上一首歌: ${currentSongIndex + 1}`);
-    loadSong(currentSongIndex);
-    // 如果当前在播放，则继续播放新歌曲
-    if (!backgroundMusic.paused) {
-      backgroundMusic.play().catch(console.log);
-    }
+    
+    // 优化：使用 requestAnimationFrame 减少重绘
+    requestAnimationFrame(() => {
+      loadSong(currentSongIndex);
+      
+      // 保持原有播放状态
+      if (wasPlaying && !userPaused) {
+        backgroundMusic.play().then(() => {
+          updateMusicButton(true);
+        }).catch(console.log);
+      } else {
+        updateMusicButton(wasPlaying);
+      }
+    });
   }
   
   // 启动时检查文件
@@ -237,17 +257,44 @@ document.addEventListener('DOMContentLoaded', function () {
     }
   }
   
-  // 更新音乐按钮状态
+  // 更新音乐按钮状态 - 优化版本
   function updateMusicButton(isPlaying) {
-    if (isPlaying) {
-      playIcon.style.display = 'none';
-      pauseIcon.style.display = 'block';
-      musicToggle.classList.add('playing');
-    } else {
-      playIcon.style.display = 'block';
-      pauseIcon.style.display = 'none';
-      musicToggle.classList.remove('playing');
-    }
+    // 使用 requestAnimationFrame 优化 DOM 更新
+    requestAnimationFrame(() => {
+      if (isPlaying) {
+        playIcon.style.display = 'none';
+        pauseIcon.style.display = 'block';
+        musicToggle.classList.add('playing');
+        
+        // 显示音乐波浪
+        const waves = document.querySelector('.music-waves');
+        if (waves) {
+          waves.style.opacity = '1';
+        }
+        
+        // 更新歌曲信息显示
+        const songInfoElement = document.querySelector('.song-info');
+        if (songInfoElement) {
+          songInfoElement.style.opacity = '1';
+        }
+      } else {
+        playIcon.style.display = 'block';
+        pauseIcon.style.display = 'none';
+        musicToggle.classList.remove('playing');
+        
+        // 隐藏音乐波浪
+        const waves = document.querySelector('.music-waves');
+        if (waves) {
+          waves.style.opacity = '0';
+        }
+        
+        // 隐藏歌曲信息
+        const songInfoElement = document.querySelector('.song-info');
+        if (songInfoElement) {
+          songInfoElement.style.opacity = '0';
+        }
+      }
+    });
   }
   
   // 音乐切换按钮事件
@@ -284,20 +331,48 @@ document.addEventListener('DOMContentLoaded', function () {
       }
     });
     
-    // 上一首按钮
+    // 上一首按钮 - 性能优化
     const prevBtn = document.getElementById('prevTrack');
     if (prevBtn) {
+      let clickTimeout = null;
+      
       prevBtn.addEventListener('click', (e) => {
         e.stopPropagation();
+        
+        // 防止过快点击造成性能问题
+        if (clickTimeout) {
+          clearTimeout(clickTimeout);
+        }
+        
+        prevBtn.classList.add('rapid-click');
+        
+        clickTimeout = setTimeout(() => {
+          prevBtn.classList.remove('rapid-click');
+        }, 200);
+        
         playPreviousSong();
       });
     }
     
-    // 下一首按钮
+    // 下一首按钮 - 性能优化
     const nextBtn = document.getElementById('nextTrack');
     if (nextBtn) {
+      let clickTimeout = null;
+      
       nextBtn.addEventListener('click', (e) => {
         e.stopPropagation();
+        
+        // 防止过快点击造成性能问题
+        if (clickTimeout) {
+          clearTimeout(clickTimeout);
+        }
+        
+        nextBtn.classList.add('rapid-click');
+        
+        clickTimeout = setTimeout(() => {
+          nextBtn.classList.remove('rapid-click');
+        }, 200);
+        
         playNextSong();
       });
     }
