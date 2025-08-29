@@ -715,6 +715,9 @@ document.addEventListener('DOMContentLoaded', function () {
           card.classList.add('timeline__card--expanded');
           console.log('Timeline card expanded');
           
+          // Load images when expanded for better performance
+          loadTimelineImages(card);
+          
           // Smooth scroll to show the expanded content
           setTimeout(() => {
             card.scrollIntoView({ 
@@ -784,6 +787,41 @@ document.addEventListener('DOMContentLoaded', function () {
     
     console.log('Timeline photo galleries initialized');
   }
+  
+  // Advanced image loading optimization
+  function loadTimelineImages(card) {
+    const images = card.querySelectorAll('img[data-src]');
+    images.forEach(img => {
+      if (img.dataset.src) {
+        img.src = img.dataset.src;
+        img.removeAttribute('data-src');
+        img.classList.add('loaded');
+      }
+    });
+  }
+  
+  // Performance optimization: Preload critical images
+  function preloadCriticalImages() {
+    const criticalImages = [
+      'assets/images/1.jpg',
+      'assets/images/4.jpg',
+      'assets/images/7.jpg',
+      'assets/images/21.jpg'
+    ];
+    
+    criticalImages.forEach(src => {
+      const link = document.createElement('link');
+      link.rel = 'preload';
+      link.as = 'image';
+      link.href = src;
+      document.head.appendChild(link);
+    });
+    
+    console.log('Critical images preloaded');
+  }
+  
+  // Initialize performance optimizations
+  preloadCriticalImages();
   
   // Initialize timeline photo galleries when the envelope is closed
   setTimeout(() => {
