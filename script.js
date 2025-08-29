@@ -19,9 +19,9 @@ document.addEventListener('DOMContentLoaded', function () {
   
   // 播放列表配置
   const playlist = [
-    { mp3: 'audio/background-sound1.mp3', ogg: 'audio/background-sound1.ogg', wav: 'audio/background-sound1.wav' },
-    { mp3: 'audio/background-sound2.mp3', ogg: 'audio/background-sound2.ogg', wav: 'audio/background-sound2.wav' },
-    { mp3: 'audio/background-sound3.mp3', ogg: 'audio/background-sound3.ogg', wav: 'audio/background-sound3.wav' }
+    { mp3: 'https://ting8.yymp3.com/new1_qt/10_zj/ezjzw/12.mp3', ogg: 'audio/background-sound1.ogg', wav: 'audio/background-sound1.wav' },
+    { mp3: 'https://ting8.yymp3.com/new26/dengziqi6/1.mp3', ogg: 'audio/background-sound2.ogg', wav: 'audio/background-sound2.wav' },
+    { mp3: 'https://ting8.yymp3.com/new11/guojing2/4.mp3', ogg: 'audio/background-sound3.ogg', wav: 'audio/background-sound3.wav' }
   ];
   let currentSongIndex = 0;
   let userPaused = false; // 用户手动控制状态
