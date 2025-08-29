@@ -148,6 +148,17 @@ document.addEventListener('DOMContentLoaded', function () {
     }
   }
   
+  // 播放上一首歌
+  function playPreviousSong() {
+    currentSongIndex = (currentSongIndex - 1 + playlist.length) % playlist.length;
+    console.log(`切换到上一首歌: ${currentSongIndex + 1}`);
+    loadSong(currentSongIndex);
+    // 如果当前在播放，则继续播放新歌曲
+    if (!backgroundMusic.paused) {
+      backgroundMusic.play().catch(console.log);
+    }
+  }
+  
   // 启动时检查文件
   checkAudioFiles();
   
@@ -272,6 +283,24 @@ document.addEventListener('DOMContentLoaded', function () {
         updateMusicButton(false);
       }
     });
+    
+    // 上一首按钮
+    const prevBtn = document.getElementById('prevTrack');
+    if (prevBtn) {
+      prevBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        playPreviousSong();
+      });
+    }
+    
+    // 下一首按钮
+    const nextBtn = document.getElementById('nextTrack');
+    if (nextBtn) {
+      nextBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        playNextSong();
+      });
+    }
   }
   
   // 用户交互时初始化音乐（如果还没有初始化）
@@ -826,7 +855,112 @@ document.addEventListener('DOMContentLoaded', function () {
   // Initialize timeline photo galleries when the envelope is closed
   setTimeout(() => {
     initTimelinePhotoGalleries();
+    initMobilePhotoGallery();
   }, 1000);
+  
+  // Mobile photo gallery optimization
+  function initMobilePhotoGallery() {
+    const isMobile = window.innerWidth <= 768;
+    if (!isMobile) return;
+    
+    // Make entire grid-item clickable on mobile, not just the image
+    const galleryItems = document.querySelectorAll('.grid-gallery .grid-item');
+    
+    galleryItems.forEach(item => {
+      const img = item.querySelector('img');
+      if (img) {
+        // Make the entire item clickable
+        item.style.cursor = 'pointer';
+        item.addEventListener('click', (e) => {
+          e.preventDefault();
+          openMobileImageViewer(img);
+        });
+        
+        // Remove individual image click handler to prevent double events
+        img.style.pointerEvents = 'none';
+      }
+    });
+    
+    console.log('Mobile photo gallery initialized with', galleryItems.length, 'items');
+  }
+  
+  // Mobile image viewer
+  function openMobileImageViewer(img) {
+    const viewer = document.createElement('div');
+    viewer.className = 'mobile-image-viewer';
+    
+    // Get image title from alt or figcaption
+    const gridItem = img.closest('.grid-item');
+    const figcaption = gridItem ? gridItem.querySelector('figcaption') : null;
+    const title = img.alt || (figcaption ? figcaption.textContent : '照片查看');
+    
+    viewer.innerHTML = `
+      <div class="mobile-viewer-header">
+        <div class="mobile-viewer-title">${title}</div>
+        <button class="mobile-viewer-close">×</button>
+      </div>
+      <div class="mobile-viewer-content">
+        <img src="${img.src}" alt="${title}" class="mobile-viewer-image">
+      </div>
+    `;
+    
+    document.body.appendChild(viewer);
+    document.body.style.overflow = 'hidden'; // Prevent background scrolling
+    
+    // Show animation
+    setTimeout(() => {
+      viewer.classList.add('active');
+      const viewerImg = viewer.querySelector('.mobile-viewer-image');
+      setTimeout(() => viewerImg.classList.add('loaded'), 100);
+    }, 10);
+    
+    // Close functionality
+    const closeBtn = viewer.querySelector('.mobile-viewer-close');
+    const closeViewer = () => {
+      viewer.classList.remove('active');
+      document.body.style.overflow = ''; // Restore scrolling
+      setTimeout(() => viewer.remove(), 300);
+    };
+    
+    closeBtn.addEventListener('click', closeViewer);
+    viewer.addEventListener('click', (e) => {
+      if (e.target === viewer || e.target.classList.contains('mobile-viewer-content')) {
+        closeViewer();
+      }
+    });
+    
+    // Mobile gesture support - improved
+    let startY = 0;
+    let startX = 0;
+    
+    viewer.addEventListener('touchstart', (e) => {
+      startY = e.touches[0].clientY;
+      startX = e.touches[0].clientX;
+    }, { passive: true });
+    
+    viewer.addEventListener('touchmove', (e) => {
+      const currentY = e.touches[0].clientY;
+      const currentX = e.touches[0].clientX;
+      const diffY = currentY - startY;
+      const diffX = Math.abs(currentX - startX);
+      
+      // Close if swipe down more than 100px and not too much horizontal movement
+      if (diffY > 100 && diffX < 50) {
+        closeViewer();
+      }
+    }, { passive: true });
+    
+    console.log('Mobile image viewer opened:', title);
+  }
+  
+  // Responsive re-initialization
+  window.addEventListener('resize', () => {
+    const isMobile = window.innerWidth <= 768;
+    if (isMobile && !document.querySelector('.mobile-gallery-initialized')) {
+      document.body.classList.add('mobile-gallery-initialized');
+      initMobilePhotoGallery();
+    }
+  });
 });
 
 

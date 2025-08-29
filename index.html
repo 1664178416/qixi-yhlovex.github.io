@@ -27,14 +27,31 @@
             <source src="audio/background-sound1.wav" type="audio/wav">
             您的浏览器不支持音频播放。
         </audio>
-        <button class="music-toggle" id="musicToggle" aria-label="播放/暂停背景音乐">
-            <svg class="music-icon play-icon" viewBox="0 0 24 24" width="24" height="24">
-                <path d="M8 5v14l11-7z" fill="currentColor"/>
-            </svg>
-            <svg class="music-icon pause-icon" viewBox="0 0 24 24" width="24" height="24" style="display: none;">
-                <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z" fill="currentColor"/>
-            </svg>
-        </button>
+        
+        <!-- Music Controls -->
+        <div class="music-controls">
+            <button class="music-nav-btn" id="prevTrack" aria-label="上一首">
+                <svg viewBox="0 0 24 24" width="16" height="16">
+                    <path d="M6 6h2v12H6zm3.5 6l8.5 6V6z" fill="currentColor"/>
+                </svg>
+            </button>
+            
+            <button class="music-toggle" id="musicToggle" aria-label="播放/暂停背景音乐">
+                <svg class="music-icon play-icon" viewBox="0 0 24 24" width="24" height="24">
+                    <path d="M8 5v14l11-7z" fill="currentColor"/>
+                </svg>
+                <svg class="music-icon pause-icon" viewBox="0 0 24 24" width="24" height="24" style="display: none;">
+                    <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z" fill="currentColor"/>
+                </svg>
+            </button>
+            
+            <button class="music-nav-btn" id="nextTrack" aria-label="下一首">
+                <svg viewBox="0 0 24 24" width="16" height="16">
+                    <path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z" fill="currentColor"/>
+                </svg>
+            </button>
+        </div>
+        
         <div class="music-waves">
             <div class="wave"></div>
             <div class="wave"></div>
