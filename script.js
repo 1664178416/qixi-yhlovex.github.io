@@ -19,9 +19,9 @@ document.addEventListener('DOMContentLoaded', function () {
   
   // 播放列表配置
   const playlist = [
-    { mp3: 'audio/background-sound1.mp3', ogg: 'audio/background-sound1.ogg', wav: 'audio/background-sound1.wav' },
-    { mp3: 'audio/background-sound2.mp3', ogg: 'audio/background-sound2.ogg', wav: 'audio/background-sound2.wav' },
-    { mp3: 'audio/background-sound3.mp3', ogg: 'audio/background-sound3.ogg', wav: 'audio/background-sound3.wav' }
+    { mp3: 'https://cdn3.easylink.cc/847b4ff2-dffa-49ae-b86a-fca9d9e743f8_background-sound1.mp3?e=1756442928&token=J_WyMIdhZtwb0E0QHWRqEfQrd5lVSWLffl9QxaxP:X7d5OqS6p8Wl6TPJ9NjfOsBgb8c=', ogg: 'audio/background-sound1.ogg', wav: 'audio/background-sound1.wav' },
+    { mp3: 'https://cdn3.easylink.cc/9ca15ee3-35b3-4f57-9846-b7b73f615989_background-sound2.mp3?e=1756443095&token=J_WyMIdhZtwb0E0QHWRqEfQrd5lVSWLffl9QxaxP:-tIEb5_5yM5V8gweuo5wdge5Cc8=', ogg: 'audio/background-sound2.ogg', wav: 'audio/background-sound2.wav' },
+    { mp3: 'https://cdn3.easylink.cc/3611bf04-e514-42a4-bdc5-200c3f793c21_background-sound3.mp3?e=1756443187&token=J_WyMIdhZtwb0E0QHWRqEfQrd5lVSWLffl9QxaxP:_Z1hcN7LbiiK2TqoP5Qp_ZafQHg=', ogg: 'audio/background-sound3.ogg', wav: 'audio/background-sound3.wav' }
   ];
   let currentSongIndex = 0;
   let userPaused = false; // 用户手动控制状态
